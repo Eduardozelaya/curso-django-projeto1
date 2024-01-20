@@ -1,6 +1,9 @@
 from django.urls import reverse, resolve
 from recipes import views
-from .test_recipe_base import RecipeTestBase,Recipe
+from unittest import skip
+
+from .test_recipe_base import RecipeTestBase
+
 
 class RecipeViewsTest(RecipeTestBase):
     # SETUP
@@ -27,7 +30,7 @@ class RecipeViewsTest(RecipeTestBase):
     def test_recipe_home_template_loads_recipes(self):
         # Need a recipe for this test
         self.make_recipe()
-        
+
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
