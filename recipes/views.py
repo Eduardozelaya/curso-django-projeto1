@@ -33,3 +33,12 @@ def recipe(request, id):
           'recipe': recipe,
           'is_detail_page': True,    
     })  
+
+def search(request):
+    search_term = request.GET.get('q')
+
+    if not search_term:
+       raise Http404() 
+
+    return render(request, 'recipes/pages/search.html')
+
