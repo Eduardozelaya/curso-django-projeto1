@@ -3,7 +3,7 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
 from recipes.models import Recipe
-from utils.pagination import make_pagination
+from utils.pagination import make_pagination 
 
 import os
 
@@ -13,6 +13,7 @@ def home(request):
     recipes = Recipe.objects.filter(
         is_published=True
     ).order_by('-id')
+
 
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
@@ -47,6 +48,7 @@ def recipe(request, id):
     })  
 
 def search(request):
+
     search_term = request.GET.get('q', '').strip()
 
     if not search_term:
