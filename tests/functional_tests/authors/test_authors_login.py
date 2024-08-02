@@ -1,6 +1,6 @@
 from .base import AuthorsBaseTest
 import pytest
-from .base import User
+from django.contrib.auth.models import User
 from django.urls import reverse
 from selenium.webdriver.common.by import By
 
@@ -43,7 +43,7 @@ class AuthorsLoginTest(AuthorsBaseTest):
     
     def test_form_login_is_invalid(self):
         self.browser.get(
-            self.live_server_url + reverse('authros:login')
+            self.live_server_url + reverse('authors:login')
         )    
         
         form = self.browser.find_element(By.CLASS_NAME,'main-form')
@@ -57,5 +57,24 @@ class AuthorsLoginTest(AuthorsBaseTest):
         
         self.assertIn(
             'Invalid username or password',
+            self.browser.find_element(By.TAG_NAME,'body').text
+        )
+        
+    def test_form_login_invalid_credentials(self):
+        self.browser.get(
+            self.live_server_url + reverse('authors:login')
+        )    
+        
+        form = self.browser.find_element(By.CLASS_NAME,'main-form')
+        
+        username = self.get_by_placeholder(form,'Type your username')
+        password = self.get_by_placeholder(form,'Type your password')
+        username.send_keys('invalid_user')
+        password.send_keys('invalid_password')
+        
+        form.submit()
+        
+        self.assertIn(
+            'Invalid credentials',
             self.browser.find_element(By.TAG_NAME,'body').text
         )
