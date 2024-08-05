@@ -73,7 +73,6 @@ def login_create(request):
         raise Http404()
     
     form = LoginForm(request.POST)
-    login_url = reverse('authors:login')
 
     if form.is_valid():
         authenticated_user = authenticate(
@@ -89,7 +88,7 @@ def login_create(request):
     else:
         messages.error(request,'Invalid username or password')   
 
-    return redirect(login_url)
+    return redirect(reverse('authors:dashboard'))
 
 @login_required(login_url='authors:login',redirect_field_name='next')
 def logout_view(request):
@@ -105,3 +104,6 @@ def logout_view(request):
     logout(request)
     return redirect(reverse('authors:login')) 
     
+@login_required(login_url='authors:login',redirect_field_name='next')
+def dashboard(request):
+    return render(request,'authors/pages/dashboard.html')

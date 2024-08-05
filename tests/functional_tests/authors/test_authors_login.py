@@ -29,52 +29,60 @@ class AuthorsLoginTest(AuthorsBaseTest):
 
         # Usuário vê a mensagem de login com sucesso e seu nome
         self.assertIn(
-            f'Your are logged in with {user.username}.',
+            f'You are logged in with {user.username}.',
             self.browser.find_element(By.TAG_NAME, 'body').text
         )
     
     def test_login_create_raises_404_if_not_POST_method(self):
+        # Usuário tenta acessar a criação de login usando GET em vez de POST
         self.browser.get(self.live_server_url + reverse('authors:login_create'))
         
+        # Verifica se a página retorna 404
         self.assertIn(
             'Not found',
-            self.browser.find_element(By.TAG_NAME,'body').text
+            self.browser.find_element(By.TAG_NAME, 'body').text
         )
     
     def test_form_login_is_invalid(self):
-        self.browser.get(
-            self.live_server_url + reverse('authors:login')
-        )    
+        # Usuário abre a página de login
+        self.browser.get(self.live_server_url + reverse('authors:login'))
         
-        form = self.browser.find_element(By.CLASS_NAME,'main-form')
+        # Usuário vê o formulário de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
         
-        username = self.get_by_placeholder(form,'Type your username')
-        password = self.get_by_placeholder(form,'Type your password')
+        # Usuário tenta submeter o formulário com dados vazios
+        username = self.get_by_placeholder(form, 'Type your username')
+        password = self.get_by_placeholder(form, 'Type your password')
         username.send_keys(' ')
         password.send_keys(' ')
         
+        # Envia o formulário
         form.submit()
         
+        # Verifica se a mensagem de erro é exibida
         self.assertIn(
             'Invalid username or password',
-            self.browser.find_element(By.TAG_NAME,'body').text
+            self.browser.find_element(By.TAG_NAME, 'body').text
         )
         
     def test_form_login_invalid_credentials(self):
-        self.browser.get(
-            self.live_server_url + reverse('authors:login')
-        )    
+        # Usuário abre a página de login
+        self.browser.get(self.live_server_url + reverse('authors:login'))
         
-        form = self.browser.find_element(By.CLASS_NAME,'main-form')
+        # Usuário vê o formulário de login
+        form = self.browser.find_element(By.CLASS_NAME, 'main-form')
         
-        username = self.get_by_placeholder(form,'Type your username')
-        password = self.get_by_placeholder(form,'Type your password')
+        # Usuário tenta submeter o formulário com credenciais inválidas
+        username = self.get_by_placeholder(form, 'Type your username')
+        password = self.get_by_placeholder(form, 'Type your password')
         username.send_keys('invalid_user')
         password.send_keys('invalid_password')
         
+        # Envia o formulário
         form.submit()
         
+        # Verifica se a mensagem de erro é exibida
         self.assertIn(
             'Invalid credentials',
-            self.browser.find_element(By.TAG_NAME,'body').text
+            self.browser.find_element(By.TAG_NAME, 'body').text
         )

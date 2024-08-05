@@ -1,52 +1,60 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
- 
+
 class AuthorLogoutTest(TestCase):
     def test_user_tries_to_logout_using_get_method(self):
-        User.objects.create_user(username='my_user',password='my_pass')
-        self.client.login(username='my_user',password='my_pass')
+        # Cria um usuário de teste
+        User.objects.create_user(username='my_user', password='my_pass')
+        # Autentica o usuário
+        self.client.login(username='my_user', password='my_pass')
         
+        # Tenta fazer logout usando o método GET
         response = self.client.get(
             reverse('authors:logout'),
             follow=True
         )
         
+        # Verifica se a resposta contém a mensagem esperada
         self.assertIn(
             'Invalid logout request',
             response.content.decode('utf-8')
         )
     
     def test_user_tries_to_logout_another_user(self):
-        User.objects.create_user(username='my_user',password='my_pass')
-        self.client.login(username='my_user',password='my_pass')
+        # Cria um usuário de teste
+        User.objects.create_user(username='my_user', password='my_pass')
+        # Autentica o usuário
+        self.client.login(username='my_user', password='my_pass')
         
+        # Tenta fazer logout de outro usuário
         response = self.client.post(
             reverse('authors:logout'),
-            data={
-                'username':'another_user'
-            },
+            data={'username': 'another_user'},
             follow=True
         )
         
+        # Verifica se a resposta contém a mensagem esperada
         self.assertIn(
             'Invalid logout request',
             response.content.decode('utf-8')
         )
         
     def test_user_can_logout_successfully(self):
-        User.objects.create_user(username='my_user',password='my_pass')
-        self.client.login(username='my_user',password='my_pass')
+        # Cria um usuário de teste
+        User.objects.create_user(username='my_user', password='my_pass')
+        # Autentica o usuário
+        self.client.login(username='my_user', password='my_pass')
         
+        # Faz logout com sucesso
         response = self.client.post(
             reverse('authors:logout'),
-            data={
-                'username':'my_user'
-            },
+            data={'username': 'my_user'},
             follow=True
         )
         
+        # Verifica se a resposta contém a mensagem esperada
         self.assertIn(
-            'Logged out succesfully',
+            'Logged out successfully',
             response.content.decode('utf-8')
         )
