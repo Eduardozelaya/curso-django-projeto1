@@ -210,4 +210,4 @@ def dashboard_recipe_delete(request):
     
     recipe.delete()
     messages.success(request,'Deleted Succesfully.')
-    return redirect(reverse('authors:dashboard'))
+    return redirect(reverse('authors:dashboard')) 
