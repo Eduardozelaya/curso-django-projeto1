@@ -39,6 +39,31 @@ class RecipeListViewBase(ListView):
 class RecipeListViewHome(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
     
+class RecipeListViewSearch(RecipeListViewBase):
+    template_name = 'recipes/pages/search.html'
+
+    def get_queryset(self):
+        search_term = self.request.GET.get('q', '').strip()
+        if not search_term:
+            raise Http404("Search term not found.")
+        
+        qs = super().get_queryset()
+        qs = qs.filter(
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term)
+        )
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update({
+            'search_term': self.request.GET.get('q', '').strip(),
+            'page_title': f'Search for "{self.request.GET.get("q", "")}" |',
+            'additional_url_query': f'&q={self.request.GET.get("q", "").strip()}',
+        })
+        return context
+        
+
         
 def home(request):
     recipes = Recipe.objects.filter(
