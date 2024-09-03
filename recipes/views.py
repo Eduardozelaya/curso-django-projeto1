@@ -30,6 +30,9 @@ class RecipeListViewBase(ListView):
             ctx.get('recipes'),
             PER_PAGE 
         )
+        ctx.update(
+            {'recipes':page_obj,'pagination_range':pagination_range}    
+        )
         
         return ctx
     
