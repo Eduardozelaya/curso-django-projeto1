@@ -4,11 +4,39 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from recipes.models import Recipe
 from utils.pagination import make_pagination 
-
+from django.views.generic import ListView
 import os
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
+class RecipeListViewBase(ListView):
+    model = Recipe 
+    context_object_name = 'recipes'
+    ordering = ['-id'] 
+    template_name = 'recipes/pages/home.html'
+    
+    def get_query_set(self,*args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(
+            is_published=True,
+        )
+        
+        return qs
+    
+    def get_context_data(self,*args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs) 
+        page_obj, pagination_range = make_pagination(
+            self.request, 
+            ctx.get('recipes'),
+            PER_PAGE 
+        )
+        
+        return ctx
+    
+class RecipeListViewHome(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html'
+    
+        
 def home(request):
     recipes = Recipe.objects.filter(
         is_published=True

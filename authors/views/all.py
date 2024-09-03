@@ -94,6 +94,6 @@ def dashboard(request):
         request,
         'authors/pages/dashboard.html',
         context={
-            'recipes': recipes,
-        }
-    )
+            'recipes': recipes 
+    })
+    
