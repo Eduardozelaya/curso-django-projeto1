@@ -40,29 +40,44 @@ class RecipeListViewHome(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
     
 class RecipeListViewSearch(RecipeListViewBase):
-    template_name = 'recipes/pages/search.html'
+    template_name ='recipes/pages/search.html'
 
-    def get_queryset(self):
-        search_term = self.request.GET.get('q', '').strip()
-        if not search_term:
-            raise Http404("Search term not found.")
-        
-        qs = super().get_queryset()
+    def get_queryset(self,*args, **kwargs):
+        search_term = self.request.GET.get('q','')
+        qs = super().get_queryset(*args, **kwargs)
         qs = qs.filter(
-            Q(title__icontains=search_term) |
-            Q(description__icontains=search_term)
+            Q(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term),
+            )
         )
-        return qs
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context.update({
-            'search_term': self.request.GET.get('q', '').strip(),
-            'page_title': f'Search for "{self.request.GET.get("q", "")}" |',
-            'additional_url_query': f'&q={self.request.GET.get("q", "").strip()}',
-        })
-        return context
         
+        return qs 
+    
+    def get_context_data(self,*args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        search_term = self.request.GET.get('q','')
+        
+        ctx.update({ 
+            'page_title':f'Search for "{search_term}" |',
+            'search_term':search_term,
+            'additional_url_query':f'&q={search_term}',
+        })
+        
+        return ctx
+    
+        
+class RecipeListViewCategory(RecipeListViewBase):
+    template_name = 'recipes/pages/category.html'
+    
+    def get_queryset(self,*args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs) 
+        qs = qs.filter(
+            category_id= self.kwargs.get('category_id')
+        ) 
+        
+        return qs
+    
 
         
 def home(request):
