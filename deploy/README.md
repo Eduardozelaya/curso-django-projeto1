@@ -121,6 +121,7 @@ git remote add app_bare eduardo.zelaya@35.224.167.160:~/appbare
 
 
 git push app_bare <branch>
+
 ```
 
 No servidor, em app_repo, faça pull:
