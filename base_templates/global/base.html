@@ -1,11 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
+    {% load static %}
     {% include "global/partials/head.html" %}
     <title>{% block title %}{% endblock title %} Recipes</title>
-
+    <link rel="stylesheet" href="{% static 'global/css/global-style.css' %}">
 </head>
 
 <body>
@@ -14,13 +14,13 @@
 
     <main class="main-content-container">
         {% block content %}{% endblock content %}
-        
         {% include "global/partials/pagination.html" %}
     </main>
 
     {% include "global/partials/footer.html" %}
+    
+    <!-- Mover o script para o final do body para otimizar o carregamento -->
     <script src="{% static 'global/js/scripts.js' %}"></script>
-
 </body>
 
 </html>
