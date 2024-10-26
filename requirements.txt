@@ -5,6 +5,11 @@ cffi==1.16.0
 Django==4.2.16
 exceptiongroup==1.2.2
 gunicorn==23.0.0
+charset-normalizer==3.3.2
+colorama==0.4.6
+coverage==7.4.0
+Django==4.2.16
+Faker==22.0.0
 h11==0.14.0
 idna==3.7
 mysql-connector==2.2.9
