@@ -1,14 +1,41 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, F, Value
 from recipes.models import Recipe
 from utils.pagination import make_pagination 
 from django.views.generic import DetailView,ListView
 import os
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Count,Max,Min,Avg,Sum
+from django.db.models.functions import Concat
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
+
+def theory(request,*args, **kwargs):
+
+    # recipes = Recipe.objects \
+    #     .values('id','title','author__username')[:10]
+    
+    # print('AQUI!!!!!')
+    # print(recipes)
+
+    # recipes =  Recipe.objects.values('id','title')[:5]
+
+    recipes = Recipe.objects.get_published()
+    numbers_of_recipes = recipes.aggregate(number=Count('id'))
+
+    context = {
+        'recipes': recipes,
+        'number_of_recipes':numbers_of_recipes['number']
+    }
+
+    return render(
+        request,
+        'recipes/pages/theory.html',
+        context=context
+    )
 
 class RecipeListViewBase(ListView):
     model = Recipe 
