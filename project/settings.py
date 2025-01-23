@@ -19,6 +19,8 @@ if os.environ.get('DEBUG',None) is None:
 
 from django.contrib.messages import constants
 
+from utils.environment import get_env_variable,parse_comma_sep_str_to_list
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +34,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True if os.environ.get('DEBUG') == '1' else False
 DEBUG = 1
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS: list[str] = parse_comma_sep_str_to_list(
+    get_env_variable('ALLOWED_HOSTS')
+)
+
+CSRF_TRUSTED_ORIGINS: list[str] = parse_comma_sep_str_to_list(
+    get_env_variable('CSRF_TRUSTED_ORIGINS')
+)
 
 # Application definition
 
