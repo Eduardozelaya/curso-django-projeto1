@@ -1,12 +1,12 @@
 <button class="button-show-menu button-show-menu-visible">
     <i class="fas fa-bars"></i>
-    {% comment %} <span class="hidden-text">Show menu</span> {% endcomment %}
+    <span class="hidden-text">Show menu</span>
 </button>
 
 <div class="menu-container menu-hidden">
-    <button class="button-show-menu button-show-menu-visible">
+    <button class="button-close-menu button-close-menu-visible">
         <i class="fas fa-times-circle"></i>
-        {% comment %} <span class="hidden-text">Close menu</span> {% endcomment %}
+        <span class="hidden-text">Close menu</span>
     </button>
 
     <div class="menu-content">
@@ -15,7 +15,8 @@
             {% if user.is_authenticated %}
                 <a href="{% url "authors:dashboard_recipe_new" %}">New Recipe</a>
                 <a href="{% url "authors:dashboard" %}">Dashboard</a>
-                <a href="{% url "authors:logout" %}">Logout</a>
+                <a href="{% url "authors:logout" %}" class="authors-logout-link">Logout</a>
+                {% include "authors/partials/form_logout.html" %}
             {% else %}
                 <a href="{% url "authors:login" %}">Login</a>
                 <a href="{% url "authors:register" %}">Register</a>
